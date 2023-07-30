@@ -42,16 +42,3 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-
-      - name: Create GitHub Release
-        permissions: write-all
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ env.TAILSCALE_VERSION }}
-          release_name: Release ${{ env.TAILSCALE_VERSION }}
-          body: |
-            Docker image with Tailscale proxy based on tailscale/tailscale:$TAILSCALE_VERSION is now available on Docker Hub.
-            Docker image: https://hub.docker.com/r/kuwiano/tailscale-proxy
