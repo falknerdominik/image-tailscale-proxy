@@ -44,6 +44,7 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
 
       - name: Create GitHub Release
+        permissions: write-all
         id: create_release
         uses: actions/create-release@v1
         env:
