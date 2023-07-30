@@ -1,4 +1,4 @@
-ARG TAILSCALE_VERSION=v1.44
+ARG TAILSCALE_VERSION=v1.44.0
 
 FROM tailscale/tailscale:$TAILSCALE_VERSION
 # inspired by the work in https://github.com/hollie/tailscale-caddy-proxy
