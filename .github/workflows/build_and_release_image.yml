@@ -13,15 +13,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
-
-      - name: Log in to Docker Hub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-
       - name: Get TAILSCALE_VERSION from Dockerfile
         id: get_version
         run: |
@@ -34,8 +25,14 @@ jobs:
         with:
           images: dfalkner/tailscale-proxy
           tags: |
-            type=match,pattern=\d.\d.\d,value=${TAILSCALE_VERSION}
-            type=match,pattern=v(\d.\d),value=${TAILSCALE_VERSION}
+            type=match,pattern=\d.\d.\d,value=${{ env.TAILSCALE_VERSION }}
+            type=match,pattern=v(\d.\d),value=${{ env.TAILSCALE_VERSION }}
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v4
