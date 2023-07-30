@@ -31,10 +31,10 @@ jobs:
         run: |
           echo "Building for Tailscale Version ${TAILSCALE_VERSION}"
           cd src
-          docker buildx build -t dfalkner/tailscale-proxy:latest .
+          docker build -t dfalkner/tailscale-proxy:latest .
           docker push dfalkner/tailscale-proxy:latest
 
-          docker buildx build -t dfalkner/tailscale-proxy:${TAILSCALE_VERSION} .
+          docker build -t dfalkner/tailscale-proxy:${TAILSCALE_VERSION} .
           docker push dfalkner/tailscale-proxy:${TAILSCALE_VERSION}
 
       - name: Create GitHub Release
