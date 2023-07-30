@@ -24,7 +24,9 @@ jobs:
 
       - name: Get TAILSCALE_VERSION from Dockerfile
         id: get_version
-        run: echo "TAILSCALE_VERSION=$(cat src/Dockerfile | grep 'ARG TAILSCALE_VERSION' | cut -d "=" -f2)" >> $GITHUB_ENV
+        run: |
+          echo "TAILSCALE_VERSION=$(cat src/Dockerfile | grep 'ARG TAILSCALE_VERSION' | cut -d "=" -f2)" >> $GITHUB_ENV
+          echo "TAILSCALE_VERSION=$(cat src/Dockerfile | grep 'ARG TAILSCALE_VERSION' | cut -d "=" -f2)" >> $GITHUB_OUTPUT
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta
