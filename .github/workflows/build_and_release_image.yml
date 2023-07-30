@@ -25,8 +25,8 @@ jobs:
         with:
           images: dfalkner/tailscale-proxy
           tags: |
-            type=match,pattern=\d.\d.\d,value=${{ env.TAILSCALE_VERSION }}
-            type=match,pattern=v(\d.\d),value=${{ env.TAILSCALE_VERSION }}
+            type=semver,pattern={{version}},value=${{ env.TAILSCALE_VERSION }}
+            type=semver,pattern={{major}}.{{minor}},value=${{ env.TAILSCALE_VERSION }}
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
