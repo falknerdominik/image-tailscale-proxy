@@ -31,6 +31,7 @@ jobs:
       - name: Build and push Docker image
         id: docker_build
         run: |
+          cd src
           docker buildx build -t dfalkner/tailscale-proxy:latest .
           docker push dfalkner/tailscale-proxy:latest
 
