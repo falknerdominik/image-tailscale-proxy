@@ -31,5 +31,6 @@ RUN mkdir --parents /var/run/tailscale && ln -s /tmp/tailscaled.sock /var/run/ta
 RUN echo "$TAILSCALE_VERSION" > /VERSION
 
 # Add the modified startup script
-COPY --chmod=755 start.sh /usr/bin/start.sh
+COPY start.sh /usr/bin/start.sh
+RUN chmod 755 /usr/bin/start.sh
 CMD  [ "start.sh" ]
