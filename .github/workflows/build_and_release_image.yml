@@ -48,3 +48,5 @@ jobs:
         uses: EndBug/latest-tag@latest
         with:
           ref: ${{ env.TAILSCALE_VERSION }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
