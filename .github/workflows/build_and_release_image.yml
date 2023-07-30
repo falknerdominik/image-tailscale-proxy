@@ -34,8 +34,8 @@ jobs:
         with:
           images: dfalkner/tailscale-proxy
           tags: |
-            type=semver,pattern={{version}},value=${TAILSCALE_VERSION}
-            type=semver,pattern={{major}}.{{minor}},value=${TAILSCALE_VERSION}
+            type=match,pattern=\d.\d.\d,value=${TAILSCALE_VERSION}
+            type=match,pattern=v(\d.\d),value=${TAILSCALE_VERSION}
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v4
