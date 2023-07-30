@@ -26,16 +26,22 @@ jobs:
         id: get_version
         run: echo "TAILSCALE_VERSION=$(cat src/Dockerfile | grep 'ARG TAILSCALE_VERSION' | cut -d "=" -f2)" >> $GITHUB_ENV
 
-      - name: Build and push Docker image
-        id: docker_build
-        run: |
-          echo "Building for Tailscale Version ${TAILSCALE_VERSION}"
-          cd src
-          docker build -t dfalkner/tailscale-proxy:latest .
-          docker push dfalkner/tailscale-proxy:latest
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
+        with:
+          images: dfalkner/tailscale-proxy
+          tags: |
+            type=semver,pattern={{version}},value=${TAILSCALE_VERSION}
+            type=semver,pattern={{major}}.{{minor}},value=${TAILSCALE_VERSION}
 
-          docker build -t dfalkner/tailscale-proxy:${TAILSCALE_VERSION} .
-          docker push dfalkner/tailscale-proxy:${TAILSCALE_VERSION}
+      - name: Build and push Docker image
+        uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
+        with:
+          context: src/
+          push: true
+          tags: ${{ steps.meta.output.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
 
       - name: Create GitHub Release
         id: create_release
