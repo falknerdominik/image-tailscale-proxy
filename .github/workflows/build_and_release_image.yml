@@ -1,0 +1,50 @@
+name: Build and Push Docker Images
+
+on:
+  push:
+    branches:
+      - main  # Change this to the branch you want to trigger the action
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Get TAILSCALE_VERSION from Dockerfile
+        id: get_version
+        run: |
+          export TAILSCALE_VERSION=$(cat src/Dockerfile | grep 'ARG TAILSCALE_VERSION' | cut -d "=" -f2)
+          echo "TAILSCALE_VERSION=${TAILSCALE_VERSION}" >> $GITHUB_ENV
+
+      - name: Build and push Docker image
+        id: docker_build
+        run: |
+          docker buildx build -t dfalkner/tailscale-proxy:latest .
+          docker push dfalkner/tailscale-proxy:latest
+
+          docker buildx build -t dfalkner/tailscale-proxy:${TAILSCALE_VERSION} .
+          docker push dfalkner/tailscale-proxy:${TAILSCALE_VERSION}
+
+      - name: Create GitHub Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ env.TAILSCALE_VERSION }}
+          release_name: Release ${{ env.TAILSCALE_VERSION }}
+          body: |
+            Docker image with Tailscale proxy based on tailscale/tailscale:$TAILSCALE_VERSION is now available on Docker Hub.
+            Docker image: https://hub.docker.com/r/kuwiano/tailscale-proxy
