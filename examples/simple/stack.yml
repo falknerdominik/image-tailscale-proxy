@@ -1,0 +1,10 @@
+version: '3.9'
+
+services:
+  nginx:
+    image: docker.io/nginx
+
+  tailscale-reverse-proxy:
+    image: docker.io/dfalkner/tailscale-proxy:latest
+    env_file: values.env
+    restart: on-failure
