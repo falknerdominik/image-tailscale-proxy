@@ -23,7 +23,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v4
         with:
-          images: dfalkner/tailscale-proxy
+          images: kuwiano/tailscale-proxy
           tags: |
             type=semver,pattern={{version}},value=${{ env.TAILSCALE_VERSION }}
             type=semver,pattern={{major}}.{{minor}},value=${{ env.TAILSCALE_VERSION }}
