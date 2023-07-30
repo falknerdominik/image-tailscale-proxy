@@ -42,11 +42,3 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-
-      - name: Tag release
-        if: github.event_name != 'pull_request'
-        uses: EndBug/latest-tag@latest
-        with:
-          ref: ${{ env.TAILSCALE_VERSION }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
